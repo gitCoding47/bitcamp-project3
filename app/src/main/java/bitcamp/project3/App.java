@@ -43,34 +43,30 @@ public class App {
         while (true) {
             System.out.print("\n접속 권한을 입력해주세요[GUEST, ADMIN, Exit(종료)] :  ");
             String grade = scanner.nextLine();
-            if (grade.equalsIgnoreCase("exit")) {
-                return;
-            }
             if (grade.equalsIgnoreCase("admin") || grade.equalsIgnoreCase("guest")) {
                 AuthGrade authGrade = AuthGrade.valueOf(grade.toUpperCase());
 
                 if (authGrade.getDescription().equalsIgnoreCase("관리자")) {
-                    //비밀번호 : 102030
                     System.out.print("비밀번호를 입력해주세요 : ");
                     try {
                         if (authGrade.getPwd() == Integer.parseInt(scanner.nextLine())) {
-                            System.out.println(authGrade.getDescription() + "로 접속하였습니다.");
+                            System.out.println(authGrade.getDescription() + "로 접속하셨습니다.");
                             App.adminMenus(authGrade);
-                        }else {
+                        }
+                        else {
                             System.out.println("비밀번호가 틀렸습니다.");
                         }
-                    }catch (NumberFormatException e){
+                    } catch (NumberFormatException e) {
                         System.out.println("비밀번호가 틀렸습니다.");
                     }
-
                 }
                 if (authGrade.getDescription().equalsIgnoreCase("게스트")) {
                     System.out.println(authGrade.getDescription() + "로 접속하였습니다.");
                     App.guestMenus(authGrade);
                 }
-            } else {
+            }
+            else {
                 System.out.println("\n없는 권한입니다. 정확한 권한을 입력해주세요.");
-
             }
         }
     }
@@ -93,29 +89,26 @@ public class App {
             }
         }
         System.out.println();
-
     }
 
     public static void adminMenus(AuthGrade grade) {
         printMainMenus(grade);
         while (true) {
             Scanner scanner = new Scanner(System.in);
-            System.out.print("[Main] > ");
+            System.out.println("[Main] > ");
             try {
                 String command = scanner.nextLine();
                 if (command.equals("menu")) {
-                    printMainMenus(grade); //menu 입력 시 메뉴 출력
+                    printMainMenus(grade);
                     continue;
                 }
-                if (command.equals("6")) return; // 6입력 시 종료
+                if (command.equals("6")) return;
                 Command com = commandMap.get(menus[Integer.parseInt(command) - 1]);
                 com.execute();
-
             } catch (Exception e) {
                 System.out.println("잘못된 입력입니다.");
             }
         }
-
     }
 
     public static void guestMenus(AuthGrade grade) {
@@ -125,11 +118,14 @@ public class App {
             System.out.print("[Main] > ");
             try {
                 String command = scanner.nextLine();
-                if (command.equals("menu")) printMainMenus(grade); //menu 입력 시 메뉴 출력
-                if (command.equals("4")) return; // 4입력 시 종료
+                if (command.equals("menu")) {
+                    printMainMenus(grade);
+                    continue;
+                }
+                if (command.equals("4")) return;
                 if (command.equalsIgnoreCase("3")) {
                     new ViewBookCommand().printAll(AddBookCommand.book);
-                }else {
+                } else {
                     Command com = commandMap.get(guestMenus[Integer.parseInt(command) - 1]);
                     com.execute();
                 }
@@ -139,4 +135,3 @@ public class App {
         }
     }
 }
-
